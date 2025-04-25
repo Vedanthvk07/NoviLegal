@@ -111,8 +111,8 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
-        <bt:Url id="Commands.Url" DefaultValue="https://vedanthvk07.github.io/NoviLegal/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://vedanthvk07.github.io/NoviLegal/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://vedanthvk07.github.io/NoviLegal/src/commands/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://vedanthvk07.github.io/NoviLegal/index.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Legal Agent has been added to assist you"/>
