@@ -472,22 +472,28 @@ async function getSelectedText(directLine) {
 async function findRiskyText(riskyText) {
   Word.run(async (context) => {
     const body = context.document.body;
-  const riskySentences = riskyText.split("|").map(s => s.trim()).filter(s => s.length > 0);
+    const riskySentences = riskyText.split("|").map(s => s.trim()).filter(s => s.length > 0);
 
-    // Step 3: Highlight each risky sentence in yellow
+    // 🔎 Step 3: Search and load all search results before applying formatting
+    const allSearchResults = [];
+
     riskySentences.forEach(sentence => {
-        const searchResults = body.search(sentence, { matchCase: false, matchWholeWord: false });
-        searchResults.load("items");
+        const results = body.search(sentence, {
+            matchCase: false,
+            matchWholeWord: false,
+            ignorePunct: true
+        });
+        results.load("items");
+        allSearchResults.push(results);
     });
 
+    // 🔄 Wait for all .search(...).load() to complete
     await context.sync();
 
-    riskySentences.forEach((sentence, i) => {
-        const searchResults = body.search(sentence, { matchCase: false, matchWholeWord: false });
-        searchResults.load("items");
-
-        searchResults.items.forEach(result => {
-            result.font.highlightColor = "#FFFF00"; // Yellow
+    // ✨ Step 4: Highlight all found results
+    allSearchResults.forEach(results => {
+        results.items.forEach(item => {
+            item.font.highlightColor = "#FFFF00"; // Yellow
         });
     });
 
