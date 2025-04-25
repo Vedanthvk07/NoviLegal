@@ -6,7 +6,7 @@ let popup=null;
 let loader=true;
  
 Office.onReady(async function (info) {
-  displayStartingMessage("Hi! I'm Legal Agent, your personal Copilot agent. I can help you create documents, modify content, and insert useful information seamlessly. How can I assist you today?");
+  displayStartingMessage("Hi! I'm Legal Agent,your personal Copilot agent. I can help you create documents, modify content, and insert useful information seamlessly. How can I assist you today?");
   let directLine1 = await initializeDirectLine();
 if (info.host === Office.HostType.Word) {
  
