@@ -358,12 +358,13 @@ async function insertResponseIntoDocumentAtCursor(response, insertAt) {
       await context.sync();
   
       console.log("Document text:", body.text);
+      getBotResponse(directLine,body.text)  
       // You can also do something with it, like show in a dialog or send to your backend
   })
   .catch((error) => {
       console.error("Error reading document text: ", error);
   });
-   getBotResponse(directLine,body.text)  
+   
   }
  
 const initializeDirectLine = async function () {
