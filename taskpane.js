@@ -199,6 +199,10 @@ async function displayChatMessage(question, response, role,directLine) {
         //speechFlag = false;  
         }
       }
+      else if(response.speak==="BodyText"){
+        console.log("fetching body text")
+        sendBodyText(directLine);
+      }
       else if(response.speak==="Selected"){
         if(response.text==="Table"){
           console.log("fetching selected table")
@@ -227,6 +231,18 @@ async function displayChatMessage(question, response, role,directLine) {
         if(speechFlag){
           ensureVoicesLoaded(async () => {
             await speakText(response.text);
+            speechFlag=true;
+        });
+       
+        }      
+      }
+      else if(response.speak==="RiskyText"){
+        console.log("Calling rsiky text");
+        await findRiskyText(response.text);
+        chatWindow.innerHTML += `<div class="bot-wrapper"><img width=20 height=20 src="assets/copilot.png"/> Legal Agent</div><div class="message bot">Risky sections marked in the document</div>`;
+        if(speechFlag){
+          ensureVoicesLoaded(async () => {
+            await speakText("Risky sections marked in the document");
             speechFlag=true;
         });
        
@@ -333,6 +349,22 @@ async function insertResponseIntoDocumentAtCursor(response, insertAt) {
       return true;
   });
   }}
+
+  async function sendBodyText(directLine){
+    Word.run(async (context) => {
+      const body = context.document.body;
+      body.load("text");
+  
+      await context.sync();
+  
+      console.log("Document text:", body.text);
+      // You can also do something with it, like show in a dialog or send to your backend
+  })
+  .catch((error) => {
+      console.error("Error reading document text: ", error);
+  });
+   getBotResponse(directLine,body.text)  
+  }
  
 const initializeDirectLine = async function () {
   try {
@@ -436,6 +468,35 @@ async function getSelectedText(directLine) {
  
 }
  
+async function findRiskyText(riskyText) {
+  Word.run(async (context) => {
+    const body = context.document.body;
+  const riskySentences = riskyText.split("|").map(s => s.trim()).filter(s => s.length > 0);
+
+    // Step 3: Highlight each risky sentence in yellow
+    riskySentences.forEach(sentence => {
+        const searchResults = body.search(sentence, { matchCase: false, matchWholeWord: false });
+        searchResults.load("items");
+    });
+
+    await context.sync();
+
+    riskySentences.forEach((sentence, i) => {
+        const searchResults = body.search(sentence, { matchCase: false, matchWholeWord: false });
+        searchResults.load("items");
+
+        searchResults.items.forEach(result => {
+            result.font.highlightColor = "#FFFF00"; // Yellow
+        });
+    });
+
+    await context.sync();
+})
+.catch((error) => {
+    console.error("Error highlighting risky text:", error);
+});
+}
+
 async function getSelectedTable(directLine) {
  
   await Word.run(async (context) => {
