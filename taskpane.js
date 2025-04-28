@@ -269,7 +269,9 @@ async function displayChatMessage(question, response, role,directLine) {
        
         }      
       }
-   
+      else if(response.speak==="hide"){
+       console.log("message hidden")    
+      }
       else if(response.text){
         chatWindow.innerHTML += `<div class="bot-wrapper"><img width=20 height=20 src="assets/copilot.png"/> Legal Agent</div><div class="message bot">${response.text}</div>`;
         document.getElementById("insertButton").style.display = "block";
