@@ -334,7 +334,7 @@ async function insertResponseIntoDocumentAtCursor(response, insertAt) {
  
       console.log("Table found. Deleting...");
      
-      // Insert a placeholder before deleting (to keep a valid reference)
+     try{ // Insert a placeholder before deleting (to keep a valid reference)
       const placeholder = tableRange.insertText(" ", Word.InsertLocation.before);
       placeholder.load("text, address"); // Load placeholder info
       await context.sync();
@@ -349,6 +349,10 @@ async function insertResponseIntoDocumentAtCursor(response, insertAt) {
  
       console.log("New table inserted.");
       return true;
+     }
+     catch{
+      return true;
+     }
   });
   }}
 
